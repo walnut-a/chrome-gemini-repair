@@ -1,0 +1,4 @@
+interface:
+  display_name: "Chrome Gemini Repair"
+  short_description: "Repair Gemini in Chrome availability"
+  default_prompt: "Use $chrome-gemini-repair to repair Gemini in Chrome and verify the side panel is available."
