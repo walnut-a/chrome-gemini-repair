@@ -1,5 +1,11 @@
 .DS_Store
 *.tmp
 *.log
+.env
+.env.*
+!.env.example
+.npmrc
+*.pem
+*.key
 chrome-local-state-backups/
 chrome-ai-fix-backups/

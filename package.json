@@ -11,6 +11,7 @@
     "SKILL.md",
     "README.md",
     "README.zh-CN.md",
+    "SECURITY.md",
     "LICENSE",
     "agents",
     "scripts",
@@ -18,7 +19,9 @@
     "lib"
   ],
   "scripts": {
-    "test": "node --test test/*.test.js",
+    "check:secrets": "scripts/check-secrets.sh",
+    "test": "npm run check:secrets && node --test test/*.test.js",
+    "prepublishOnly": "npm test && npm run validate:skill",
     "validate:skill": "python3 \"$HOME/.codex/skills/.system/skill-creator/scripts/quick_validate.py\" ."
   },
   "repository": {
