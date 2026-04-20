@@ -19,10 +19,10 @@ This is not affiliated with Google. It edits your local Chrome profile state, so
 
 ## Install As A Codex Skill
 
-Use `npx` to install from GitHub:
+Use `npx` to install:
 
 ```bash
-npx --yes github:walnut-a/chrome-gemini-repair install
+npx chrome-gemini-repair install
 ```
 
 The installer copies this skill into:
@@ -34,7 +34,7 @@ The installer copies this skill into:
 To use a custom Codex home:
 
 ```bash
-CODEX_HOME=/path/to/codex npx --yes github:walnut-a/chrome-gemini-repair install
+CODEX_HOME=/path/to/codex npx chrome-gemini-repair install
 ```
 
 You can also clone this repository directly into your Codex skills directory:
