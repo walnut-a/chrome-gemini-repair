@@ -1,5 +1,7 @@
 # Chrome Gemini Repair
 
+[English](README.md) | [中文](README.zh-CN.md)
+
 A small Codex skill and macOS repair script for restoring **Gemini in Chrome**, the **Ask Gemini** toolbar button, Glic, Chrome AI innovations, and AI-powered history search when Chrome only shows **Help me write** or hides the Gemini side panel after an update.
 
 This is not affiliated with Google. It edits your local Chrome profile state, so read the script and keep the generated backup path.
