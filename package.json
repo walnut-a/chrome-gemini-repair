@@ -1,0 +1,39 @@
+{
+  "name": "chrome-gemini-repair",
+  "version": "0.1.0",
+  "description": "Installer for the Chrome Gemini Repair Codex skill.",
+  "license": "MIT",
+  "type": "commonjs",
+  "bin": {
+    "chrome-gemini-repair": "bin/chrome-gemini-repair.js"
+  },
+  "files": [
+    "SKILL.md",
+    "README.md",
+    "README.zh-CN.md",
+    "LICENSE",
+    "agents",
+    "scripts",
+    "bin",
+    "lib"
+  ],
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "validate:skill": "python3 \"$HOME/.codex/skills/.system/skill-creator/scripts/quick_validate.py\" ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/walnut-a/chrome-gemini-repair.git"
+  },
+  "keywords": [
+    "chrome",
+    "chrome-ai",
+    "codex-skill",
+    "gemini",
+    "glic",
+    "macos"
+  ],
+  "engines": {
+    "node": ">=18"
+  }
+}

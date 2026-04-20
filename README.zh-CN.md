@@ -19,7 +19,25 @@
 
 ## 安装为 Codex Skill
 
-把这个仓库 clone 到 Codex skills 目录：
+使用 `npx` 从 GitHub 安装：
+
+```bash
+npx --yes github:walnut-a/chrome-gemini-repair install
+```
+
+安装器会把这个 skill 复制到：
+
+```text
+~/.codex/skills/chrome-gemini-repair
+```
+
+如果使用自定义 Codex home：
+
+```bash
+CODEX_HOME=/path/to/codex npx --yes github:walnut-a/chrome-gemini-repair install
+```
+
+也可以直接把这个仓库 clone 到 Codex skills 目录：
 
 ```bash
 git clone https://github.com/walnut-a/chrome-gemini-repair.git ~/.codex/skills/chrome-gemini-repair
