@@ -97,7 +97,7 @@ scripts/repair-chrome-gemini.sh --channel all
 这个仓库把本机调试流程和以下公开资料中的做法整理成了可重复运行的修复流程：
 
 - [`lcandy2/enable-chrome-ai`](https://github.com/lcandy2/enable-chrome-ai)：记录并脚本化了 `Local State` 中 `variations_country`、`variations_permanent_consistency_country` 和 `is_glic_eligible` 的核心修改方式。
-- 微信文章：[自带 Nano 改图，一键总结 N 个网页！Chrome 这次更新，让所有 AI 插件都下岗了（附国内开启方法）](https://mp.weixin.qq.com/s/g3sFstE99pEnnw9kWCMeJg?clicktime=1771282478&enterid=1771282478&scene=126&sessionid=1771282476&subscene=307)。原始页面在部分环境里可能需要微信验证。
+- 微信文章：[我花了几个小时才解决：Chrome里Gemini图标突然消失修复教程](https://mp.weixin.qq.com/s/g3sFstE99pEnnw9kWCMeJg?clicktime=1771282478&enterid=1771282478&scene=126&sessionid=1771282476&subscene=307)。原始页面在部分环境里可能需要微信验证。
 - 原微信页面需要验证时用于对照的公开镜像：[53AI mirror](https://www.53ai.com/news/LargeLanguageModel/2026013069547.html)。
 
 ## License

@@ -97,7 +97,7 @@ Clicking `Ask Gemini` should open the `chrome://glic/` side panel backed by `gem
 This repository packages a repair workflow derived from local debugging and the following public references:
 
 - [`lcandy2/enable-chrome-ai`](https://github.com/lcandy2/enable-chrome-ai), which documents and scripts the core `Local State` patching approach for `variations_country`, `variations_permanent_consistency_country`, and `is_glic_eligible`.
-- WeChat article: [自带 Nano 改图，一键总结 N 个网页！Chrome 这次更新，让所有 AI 插件都下岗了（附国内开启方法）](https://mp.weixin.qq.com/s/g3sFstE99pEnnw9kWCMeJg?clicktime=1771282478&enterid=1771282478&scene=126&sessionid=1771282476&subscene=307). The original page may require WeChat verification in some environments.
+- WeChat article: [我花了几个小时才解决：Chrome里Gemini图标突然消失修复教程](https://mp.weixin.qq.com/s/g3sFstE99pEnnw9kWCMeJg?clicktime=1771282478&enterid=1771282478&scene=126&sessionid=1771282476&subscene=307). The original page may require WeChat verification in some environments.
 - Public mirror used for comparison when the original WeChat page required verification: [53AI mirror](https://www.53ai.com/news/LargeLanguageModel/2026013069547.html).
 
 ## License
