@@ -34,7 +34,7 @@ By default this repairs Google Chrome Stable. Use `--channel beta`, `--channel d
 scripts/repair-chrome-gemini.sh --dry-run
 ```
 
-3. Apply the repair. The script quits Chrome, waits for processes to exit, backs up profile files, patches JSON, optionally sets Chrome app language to `en-US`, starts Chrome, and opens `chrome://settings/ai`.
+3. Apply the repair. The script quits Chrome, waits for the main Chrome process to exit, ignores helper-only processes such as `chrome_crashpad_handler`, backs up profile files, patches JSON, verifies `Local State` was written as `us`, optionally sets Chrome app language to `en-US`, starts Chrome, opens `chrome://settings/ai`, then prints a final dry check and `before -> after` summary.
 4. Verify visually. A successful repair shows:
    - `Gemini in Chrome` row under AI innovations.
    - `Ask Gemini` toolbar button.
@@ -50,6 +50,7 @@ The repair targets Chrome user data, not the browser app bundle.
 - Adds Glic-related labs experiments such as `glic@1`, `glic-side-panel@1`, `glic-actor@1`, `glic-pre-warming@1`, `glic-z-order-changes@1`, and `glic-fre-pre-warming@1`. Chrome may drop unavailable flags after launch.
 - Sets Chrome language to `en-US` unless `--keep-language` is passed.
 - Launches Chrome once with `--variations-override-country=us` unless `--no-launch` is passed.
+- Prints final `before -> after` values for `variations_country`, `variations_permanent_consistency_country`, `is_glic_eligible_false_count`, and `intl.accept_languages`.
 
 ## Important Notes
 

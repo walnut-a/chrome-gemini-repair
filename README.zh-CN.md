@@ -15,7 +15,9 @@
 - 将 `variations_permanent_consistency_country` 设为 `[<Last Version>, "us"]`。
 - 添加 Glic 相关 labs experiments，例如 `glic@1`、`glic-side-panel@1`、`glic-actor@1` 和 `glic-pre-warming@1`。
 - 可选择把 Chrome 语言设为 `en-US`。
+- 重新启动 Chrome 前读回 `Local State`，如果国家状态没有写成 `us` 会提前失败。
 - 重新启动 Chrome，并打开 `chrome://settings/ai` 方便肉眼验证。
+- 结束时再做一次 dry check，并打印关键字段的 `before -> after`。
 
 ## 安装为 Codex Skill
 
@@ -58,6 +60,13 @@ scripts/repair-chrome-gemini.sh --dry-run
 scripts/repair-chrome-gemini.sh
 ```
 
+修复输出会包含最终 dry check。关键结果应该类似：
+
+```text
+variations_country: cn -> us
+variations_permanent_consistency_country: ['148.0.7778.97', 'cn'] -> ['148.0.7778.97', 'us']
+```
+
 如果想保留当前 Chrome 语言设置：
 
 ```bash
@@ -88,6 +97,7 @@ scripts/repair-chrome-gemini.sh --channel all
 
 - 脚本仅支持 macOS。
 - 不要在 Chrome 正在运行时修改 `Local State`，否则 Chrome 可能会覆盖 profile 里的改动。
+- 判断 Chrome 是否还开着时，脚本会忽略 `chrome_crashpad_handler` 这类辅助进程。
 - Chrome 启动后可能会移除不可用的实验 flags，这是正常现象。
 - English (`en-US`) 是这个修复方式目前最可靠的启用语言。较新的 Chrome 灰度可能会在启用后支持更多语言。
 - 备份文件会写入 `~/.codex/backups/chrome-gemini-repair/`。

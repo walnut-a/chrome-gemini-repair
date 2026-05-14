@@ -15,7 +15,9 @@ This is not affiliated with Google. It edits your local Chrome profile state, so
 - Sets `variations_permanent_consistency_country` to `[<Last Version>, "us"]`.
 - Adds Glic-related labs experiments such as `glic@1`, `glic-side-panel@1`, `glic-actor@1`, and `glic-pre-warming@1`.
 - Optionally sets Chrome language to `en-US`.
+- Reads `Local State` back before relaunching Chrome and fails early if the country state was not written as `us`.
 - Relaunches Chrome and opens `chrome://settings/ai` for visual verification.
+- Prints a final dry check with `before -> after` values for the key profile fields.
 
 ## Install As A Codex Skill
 
@@ -58,6 +60,13 @@ scripts/repair-chrome-gemini.sh --dry-run
 scripts/repair-chrome-gemini.sh
 ```
 
+The repair output includes a final dry check. The important lines should end up like:
+
+```text
+variations_country: cn -> us
+variations_permanent_consistency_country: ['148.0.7778.97', 'cn'] -> ['148.0.7778.97', 'us']
+```
+
 To preserve your current Chrome language setting:
 
 ```bash
@@ -88,6 +97,7 @@ Clicking `Ask Gemini` should open the `chrome://glic/` side panel backed by `gem
 
 - The script is macOS-only.
 - Do not edit `Local State` while Chrome is running; Chrome can overwrite profile changes.
+- The script ignores helper processes such as `chrome_crashpad_handler` when deciding whether Chrome is still open.
 - Chrome may remove unavailable experimental flags after launch. That is expected.
 - English (`en-US`) is the most reliable activation language for this workaround. Newer Chrome rollouts may support more languages after activation.
 - Backups are written to `~/.codex/backups/chrome-gemini-repair/`.

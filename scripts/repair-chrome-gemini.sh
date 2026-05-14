@@ -116,7 +116,14 @@ selected_channels() {
 
 chrome_processes_for_app() {
   local app="$1"
-  ps -axww -o pid=,command= | awk -v app="/Applications/"$app".app" 'index($0, app) {print}'
+  local needle="/Applications/${app}.app"
+  ps -axww -o pid=,command= | awk -v needle="$needle" '
+    index($0, needle) &&
+    $0 !~ /chrome_crashpad_handler/ &&
+    $0 !~ /awk -v needle/ {
+      print
+    }
+  '
 }
 
 quit_app_and_wait() {
@@ -133,23 +140,11 @@ quit_app_and_wait() {
   return 1
 }
 
-print_state() {
-  local channel="$1"
-  local user_data="$2"
+profile_state_values() {
+  local user_data="$1"
+  local bundle="$2"
   local local_state="$user_data/Local State"
   local prefs="$user_data/Default/Preferences"
-  local app bundle
-  app="$(channel_app "$channel")"
-  bundle="$(channel_bundle "$channel")"
-
-  echo "== $channel =="
-  echo "app=$app"
-  echo "user_data=$user_data"
-  if [ -f "$user_data/Last Version" ]; then
-    echo "last_version=$(cat "$user_data/Last Version")"
-  else
-    echo "last_version=missing"
-  fi
 
   if [ -f "$local_state" ]; then
     python3 - "$local_state" <<'PY'
@@ -200,12 +195,111 @@ PY
   else
     echo "AppleLanguages=missing"
   fi
+}
+
+print_state() {
+  local channel="$1"
+  local user_data="$2"
+  local label="${3:-$channel}"
+  local app bundle
+  app="$(channel_app "$channel")"
+  bundle="$(channel_bundle "$channel")"
+
+  echo "== $label =="
+  echo "app=$app"
+  echo "user_data=$user_data"
+  if [ -f "$user_data/Last Version" ]; then
+    echo "last_version=$(cat "$user_data/Last Version")"
+  else
+    echo "last_version=missing"
+  fi
+  profile_state_values "$user_data" "$bundle"
   echo
+}
+
+state_value() {
+  local state="$1"
+  local key="$2"
+  printf '%s\n' "$state" | awk -F= -v key="$key" '
+    $1 == key {
+      print substr($0, length(key) + 2)
+      found = 1
+      exit
+    }
+    END {
+      if (!found) {
+        print "missing"
+      }
+    }
+  '
+}
+
+print_before_after() {
+  local channel="$1"
+  local before_state="$2"
+  local after_state="$3"
+  local key before after
+
+  echo "== $channel before -> after =="
+  for key in \
+    variations_country \
+    variations_permanent_consistency_country \
+    is_glic_eligible_false_count \
+    intl.accept_languages
+  do
+    before="$(state_value "$before_state" "$key")"
+    after="$(state_value "$after_state" "$key")"
+    echo "$key: $before -> $after"
+  done
+  echo
+}
+
+verify_local_state_repair() {
+  local channel="$1"
+  local local_state="$2"
+
+  python3 - "$local_state" "$channel" <<'PY'
+import json, sys
+path, channel = sys.argv[1], sys.argv[2]
+with open(path, encoding="utf-8") as f:
+    data = json.load(f)
+
+def walk(obj):
+    if isinstance(obj, dict):
+        yield obj
+        for value in obj.values():
+            yield from walk(value)
+    elif isinstance(obj, list):
+        for value in obj:
+            yield from walk(value)
+
+errors = []
+country = data.get("variations_country")
+if country != "us":
+    errors.append(f"variations_country={country!r}")
+
+permanent = data.get("variations_permanent_consistency_country")
+if isinstance(permanent, list) and len(permanent) > 1 and permanent[1] != "us":
+    errors.append(f"variations_permanent_consistency_country={permanent!r}")
+
+false_count = sum(
+    1 for obj in walk(data)
+    if "is_glic_eligible" in obj and obj.get("is_glic_eligible") is not True
+)
+if false_count:
+    errors.append(f"is_glic_eligible_false_count={false_count}")
+
+if errors:
+    print(f"Local State verification failed for {channel}: " + ", ".join(errors), file=sys.stderr)
+    sys.exit(1)
+PY
+  echo "verified_local_state=$channel"
 }
 
 patch_channel() {
   local channel="$1"
   local app bundle user_data local_state prefs last_version backup_root
+  local before_state after_state
   app="$(channel_app "$channel")"
   bundle="$(channel_bundle "$channel")"
   user_data="$(channel_user_data "$channel")"
@@ -217,6 +311,7 @@ patch_channel() {
     return 0
   fi
 
+  before_state="$(profile_state_values "$user_data" "$bundle")"
   print_state "$channel" "$user_data"
 
   if [ "$DRY_RUN" -eq 1 ]; then
@@ -295,6 +390,8 @@ with open(tmp, "w", encoding="utf-8") as f:
 os.replace(tmp, path)
 PY
 
+  verify_local_state_repair "$channel" "$local_state"
+
   if [ "$KEEP_LANGUAGE" -eq 0 ]; then
     if [ -f "$prefs" ]; then
       python3 - "$prefs" <<'PY'
@@ -325,6 +422,10 @@ PY
       open -a "$app" "chrome://settings/ai" >/dev/null 2>&1 || true
     fi
   fi
+
+  after_state="$(profile_state_values "$user_data" "$bundle")"
+  print_state "$channel" "$user_data" "$channel final dry check"
+  print_before_after "$channel" "$before_state" "$after_state"
 }
 
 for channel in $(selected_channels); do
