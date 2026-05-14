@@ -82,6 +82,26 @@ scripts/repair-chrome-gemini.sh --channel canary
 scripts/repair-chrome-gemini.sh --channel all
 ```
 
+## 发布
+
+这个包已经准备好通过 GitHub Actions 使用 npm Trusted Publishing。
+
+在 npm 包设置里只需要配置一次 trusted publisher：
+
+```text
+Package: chrome-gemini-repair
+Repository: walnut-a/chrome-gemini-repair
+Workflow: .github/workflows/npm-publish.yml
+Environment: 留空
+```
+
+以后发布新版本时，更新 `package.json` 版本号，提交到 `main`，再推一个版本 tag：
+
+```bash
+git tag v0.1.2
+git push origin main v0.1.2
+```
+
 ## 验证
 
 成功运行后，`chrome://settings/ai` 里应该能看到：

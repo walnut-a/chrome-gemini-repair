@@ -22,11 +22,14 @@
     "check:secrets": "scripts/check-secrets.sh",
     "test": "npm run check:secrets && node --test test/*.test.js",
     "prepublishOnly": "npm test && npm run validate:skill",
-    "validate:skill": "python3 \"$HOME/.codex/skills/.system/skill-creator/scripts/quick_validate.py\" ."
+    "validate:skill": "node scripts/validate-skill.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/walnut-a/chrome-gemini-repair.git"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "keywords": [
     "chrome",

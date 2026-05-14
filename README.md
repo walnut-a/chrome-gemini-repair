@@ -82,6 +82,26 @@ scripts/repair-chrome-gemini.sh --channel canary
 scripts/repair-chrome-gemini.sh --channel all
 ```
 
+## Release
+
+This package is prepared for npm Trusted Publishing from GitHub Actions.
+
+Configure the npm package trusted publisher once:
+
+```text
+Package: chrome-gemini-repair
+Repository: walnut-a/chrome-gemini-repair
+Workflow: .github/workflows/npm-publish.yml
+Environment: leave empty
+```
+
+Then publish future versions by bumping `package.json`, committing to `main`, and pushing a version tag:
+
+```bash
+git tag v0.1.2
+git push origin main v0.1.2
+```
+
 ## Verification
 
 After a successful run, `chrome://settings/ai` should show:
